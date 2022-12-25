@@ -3,12 +3,14 @@ package io.ashz.utility;
 import java.io.File;
 import java.io.IOException;
 
+import io.ashz.ConstantEffect;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class FileManager
 {
+    private ConstantEffect plugin;
     // ashz : all paths
     public static String folder_Profile = new String(File.separator+"Profile"+File.separator);
     public static String file_automove = new String("automove");
@@ -16,11 +18,10 @@ public class FileManager
     // ashz : use object "configuration" methods to edit a Configuration File
     public FileConfiguration configuration;
     private File objectFile;
-    private AXPlayerHelper plugin;
     private String filePath;
 
     // ashz : initiating a file object for editing (creates file if it does not exist)
-    public FileManager(AXPlayerHelper plugin, String fileName)
+    public FileManager(ConstantEffect plugin, String fileName)
     {
         this.plugin = plugin;
         this.filePath = new String(fileName+".yml");
@@ -47,7 +48,7 @@ public class FileManager
     }
 
     // ashz : on plugin start, check or create for files and folder
-    public static void init_FileManager(AXPlayerHelper plugin)
+    public static void init_FileManager(ConstantEffect plugin)
     {
         // ashz : create folder if does not exist
         if(!new File(plugin.getDataFolder()+File.separator+folder_Profile).exists()) {
@@ -59,7 +60,7 @@ public class FileManager
     }
 
     // ashz : will try to make a new file (returns true on success, false on fail)
-    public static boolean createFile(AXPlayerHelper plugin, String fileName)
+    public static boolean createFile(ConstantEffect plugin, String fileName)
     {
         File tmpObjectFile = new File(plugin.getDataFolder()+File.separator+fileName+".yml");
 
@@ -88,7 +89,7 @@ public class FileManager
     }
 
     // ashz : use on simple value edits to file (returns true on success, false on fail)
-    public static boolean editFile(AXPlayerHelper plugin, String filePath, String indexPath, Object value)
+    public static boolean editFile(ConstantEffect plugin, String filePath, String indexPath, Object value)
     {
         File tmpObjectFile = new File(plugin.getDataFolder()+File.separator+filePath);
         if(!tmpObjectFile.exists()) {
@@ -186,64 +187,6 @@ public class FileManager
             return true;
         }
         return this.configuration.getBoolean("tag.first_join");
-    }
-
-    public String getPlayerRank() {
-        return this.configuration.getString(FileManager.rank_staff);
-    }
-
-    public void setPlayerRank(playerRank rankValue) {
-        String rankString;
-        switch(rankValue) {
-            case PLAYER:{
-                rankString="PLAYER";
-                break;
-            }
-            case MODERATOR:{
-                rankString="MODERATOR";
-                break;
-            }
-            case TECHNICIAN:{
-                rankString="TECHNICIAN";
-                break;
-            }
-            case DEVELOPER:{
-                rankString="DEVELOPER";
-                break;
-            }
-            case ADMINISTRATOR:{
-                rankString="ADMINISTRATOR";
-                break;
-            }
-            default:{
-                this.plugin.getServer().getConsoleSender().sendMessage("[Rank] error in getting rank value, invalid rank value (possible Java error)");
-                return;
-            }
-        }
-        this.configuration.set(FileManager.rank_staff, rankString);
-        save();
-    }
-
-    public boolean setPlayerRank(String rankValue) {
-        switch(rankValue) {
-            case "PLAYER":
-            case "MODERATOR":
-            case "TECHNICIAN":
-            case "DEVELOPER":
-            case "ADMINISTRATOR": break;
-            default:{
-                return false;
-            }
-        }
-        this.configuration.set(FileManager.rank_staff, rankValue);
-        save();
-        return true;
-    }
-
-    public void logtime() {
-
-
-
     }
 
 }
