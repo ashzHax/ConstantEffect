@@ -1,5 +1,5 @@
 name: ConstantEffect
 author: ashz
-main: oi.ashz.ConstantEffect
+main: io.ashz.ConstantEffect
 version: 1.0
 api-version: 1.19

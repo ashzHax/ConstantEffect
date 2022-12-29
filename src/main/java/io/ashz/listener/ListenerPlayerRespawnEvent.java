@@ -9,21 +9,26 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.List;
+
 public class ListenerPlayerRespawnEvent implements Listener {
     private ConstantEffect plugin;
     private long giveEffectDelay = 5L;
+    private List<PotionEffect> potionEffectList;
 
-    public ListenerPlayerRespawnEvent(ConstantEffect p) {
+    public ListenerPlayerRespawnEvent(ConstantEffect p, List<PotionEffect> e) {
         this.plugin = p;
+        this.potionEffectList = e;
     }
 
     @EventHandler
     public void LPlayerRespawnEvent(PlayerRespawnEvent e) {
-        Player p = e.getPlayer();
-        PotionEffect pe = new PotionEffect(PotionEffectType.CONDUIT_POWER, Integer.MAX_VALUE-1, 0, false, false);
+        Player eventPlayer = e.getPlayer();
 
         Bukkit.getScheduler().runTaskLater(this.plugin, task -> {
-            p.addPotionEffect(pe);
+            for(PotionEffect effectIndex : this.potionEffectList) {
+                eventPlayer.addPotionEffect(effectIndex);
+            }
         }, this.giveEffectDelay);
     }
 }
